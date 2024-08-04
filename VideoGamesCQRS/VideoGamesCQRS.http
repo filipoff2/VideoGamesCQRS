@@ -1,0 +1,6 @@
+@VideoGamesCQRS_HostAddress = http://localhost:5226
+
+GET {{VideoGamesCQRS_HostAddress}}/Player/
+Accept: application/json
+
+###
