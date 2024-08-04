@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VideoGamesCQRS.Data;
+using VideoGamesCQRS.Features.Players.CreatePlayer;
 using VideoGamesCQRS.Models;
 
 namespace VideoGamesCQRS.Controllers
@@ -10,16 +12,17 @@ namespace VideoGamesCQRS.Controllers
     public class PlayerController : ControllerBase
     {
         private readonly VideoGameAppDbContext _context;
-        public PlayerController(VideoGameAppDbContext context)
+        private readonly ISender _sender;
+        public PlayerController(VideoGameAppDbContext context, ISender sender)
         {
             _context = context;
+            _sender = sender;
         }
         [HttpPost("create-player")]
-        public async Task<ActionResult<int>> CreatePlayer(Player player)
+        public async Task<ActionResult<int>> CreatePlayer(CreatePlayerCommand command)
         {
-            _context.Players.Add(player);
-            await _context.SaveChangesAsync();
-            return Ok(player.Id);
+            var id = await _sender.Send(command);
+            return Ok(id);
         }
 
         [HttpGet("get-user")]

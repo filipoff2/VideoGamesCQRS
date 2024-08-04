@@ -9,6 +9,10 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<VideoGameAppDbContext>(options => options.UseInMemoryDatabase("VideoGameDB"));
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
+builder.Services.AddMediatR(configuration =>
+{
+    configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
+});
 var app = builder.Build();
 
 
