@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using VideoGamesCQRS.Data;
+using VideoGamesCQRS.Events;
 using VideoGamesCQRS.Models;
 
 namespace VideoGamesCQRS.Features.Players.CreatePlayer
@@ -7,9 +8,11 @@ namespace VideoGamesCQRS.Features.Players.CreatePlayer
     public class CreatePlayerCommandHandler : IRequestHandler<CreatePlayerCommand, int>
     {
         private readonly VideoGameAppDbContext _context;
+        private readonly IMediator _mediator;
 
-        public CreatePlayerCommandHandler(VideoGameAppDbContext context)
+        public CreatePlayerCommandHandler(VideoGameAppDbContext context, IMediator mediator)
         {
+            _mediator = mediator;
             _context = context;
         }
 
@@ -22,6 +25,8 @@ namespace VideoGamesCQRS.Features.Players.CreatePlayer
             };
             _context.Players.Add(player);
             await _context.SaveChangesAsync();
+
+            await _mediator.Publish(new CreatePlayerCompletedEvent(player));
             return player.Id;
         }
     }
