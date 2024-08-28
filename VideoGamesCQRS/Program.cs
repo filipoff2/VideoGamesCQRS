@@ -18,10 +18,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Validation:3a: register 
-//builder.Services.AddScoped<IValidator<CreatePlayerCommand>, CreatePlayerCommandValidator>();
+builder.Services.AddScoped<IValidator<CreatePlayerCommand>, CreatePlayerCommandValidator>();
 
-//Validation:3b: Register done in via nugget:fluentvalidation.dependencyinjectionextensions
-builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+//Validation:3b: Disable 3a and Register in via nugget:fluentvalidation.dependencyinjectionextensions
+//builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
 builder.Services.AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
