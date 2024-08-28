@@ -16,18 +16,18 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<VideoGameAppDbContext>(options => options.UseInMemoryDatabase("VideoGameDB"));
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
-//Validation:2
-//builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-builder.Services.AddScoped<IValidator<CreatePlayerCommand>, CreatePlayerCommandValidator>();
 
+//Validation:3a: register 
+//builder.Services.AddScoped<IValidator<CreatePlayerCommand>, CreatePlayerCommandValidator>();
+
+//Validation:3b: Register done in via nugget:fluentvalidation.dependencyinjectionextensions
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 builder.Services.AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    //Validation:2
+    //Validation:2 
     configuration.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 });
-
-
 
 var app = builder.Build();
 
