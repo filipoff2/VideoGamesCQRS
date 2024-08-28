@@ -6,6 +6,7 @@ using VideoGamesCQRS.Data;
 using FluentValidation;
 using System;
 using VideoGamesCQRS.Features.Players.CreatePlayer;
+using VideoGamesCQRS.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,16 +18,16 @@ builder.Services.AddDbContext<VideoGameAppDbContext>(options => options.UseInMem
 builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
 
-//Validation:3a: register 
+//Validation 2:3a: register 
 builder.Services.AddScoped<IValidator<CreatePlayerCommand>, CreatePlayerCommandValidator>();
 
-//Validation:3b: Disable 3a and Register in via nugget:fluentvalidation.dependencyinjectionextensions
+//Validation 2: 3b: Disable 3a and Register in via nugget:fluentvalidation.dependencyinjectionextensions
 //builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
 builder.Services.AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    //Validation:2 
+    //Validation 2: 
     configuration.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 });
 
